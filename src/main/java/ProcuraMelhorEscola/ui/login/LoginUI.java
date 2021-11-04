@@ -74,6 +74,7 @@ public class LoginUI extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Email");
         jLabel2.setName("UserLabel"); // NOI18N
 
@@ -87,6 +88,7 @@ public class LoginUI extends javax.swing.JPanel {
         });
 
         jLabel3.setFont(new java.awt.Font("Liberation Sans", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Senha");
 
         campoSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
