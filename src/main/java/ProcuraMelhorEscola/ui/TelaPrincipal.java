@@ -18,12 +18,15 @@ import javax.swing.JFrame;
 public class TelaPrincipal extends JFrame implements ControlaTela {
     private TelasEnum telaAtual;
     
-    TelaPrincipal(String nome) {
+    public TelaPrincipal(String nome) {
         super(nome);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         this.telaAtual = TelasEnum.SPLASH;
-        this.getContentPane().add(new SplashUI());
+        this.getContentPane().add(new SplashUI(
+                this,
+                Sessao.pegarInstancia()
+        ));
         
         this.pack();
     }
@@ -36,12 +39,20 @@ public class TelaPrincipal extends JFrame implements ControlaTela {
     public void mudarTelaPara(TelasEnum telaAMudar, String dados) {
         this.getContentPane().removeAll();
         
+        
+        this.telaAtual = telaAMudar;
         switch(telaAMudar) {
             case SPLASH:
-                this.getContentPane().add(new SplashUI());
+                this.getContentPane().add(new SplashUI(
+                        this,
+                        Sessao.pegarInstancia()
+                ));
                 break;
             case LOGIN:
-                this.getContentPane().add(new LoginUI());
+                this.getContentPane().add(new LoginUI(
+                        this,
+                        Sessao.pegarInstancia()
+                ));
                 break;
             case CADASTRO:
                 this.getContentPane().add(new CadastroUI(
@@ -53,5 +64,7 @@ public class TelaPrincipal extends JFrame implements ControlaTela {
                 throw new AssertionError(telaAMudar.name());
             
         }
+        
+        this.pack();
     }
 }

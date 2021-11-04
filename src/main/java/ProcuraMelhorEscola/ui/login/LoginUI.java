@@ -5,16 +5,26 @@
  */
 package ProcuraMelhorEscola.ui.login;
 
+import ProcuraMelhorEscola.session.Sessao;
+import ProcuraMelhorEscola.ui.ControlaTela;
+import ProcuraMelhorEscola.ui.TelasEnum;
+
 /**
  *
  * @author jomar
  */
 public class LoginUI extends javax.swing.JPanel {
-
+    private final ControlaTela controlaTela;
+    private final Sessao sessao;
+    
     /**
      * Creates new form LoginUI
+     * @param controlaTela
+     * @param sessao
      */
-    public LoginUI() {
+    public LoginUI(ControlaTela controlaTela, Sessao sessao) {
+        this.controlaTela = controlaTela;
+        this.sessao = sessao;
         initComponents();
     }
 
@@ -164,6 +174,7 @@ public class LoginUI extends javax.swing.JPanel {
 
     private void cadastrarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarBtnActionPerformed
         // TODO add your handling code here:
+        controlaTela.mudarTelaPara(TelasEnum.CADASTRO, "");
     }//GEN-LAST:event_cadastrarBtnActionPerformed
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
