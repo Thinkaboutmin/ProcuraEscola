@@ -20,6 +20,8 @@ public class CadastroUI extends javax.swing.JPanel {
     final private ControlaTela controlaTela;
     final private Sessao sessao;
     
+    private volatile boolean realizandoAcao = false;
+    
     
     /**
      * Creates new form LoginUI
@@ -53,6 +55,8 @@ public class CadastroUI extends javax.swing.JPanel {
         voltarBtn = new java.awt.Button();
         cadastrarBtn = new java.awt.Button();
 
+        setBackground(new java.awt.Color(51, 51, 51));
+
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
         jPanel1.setName("Header"); // NOI18N
 
@@ -80,6 +84,8 @@ public class CadastroUI extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setLabelFor(campoEmail);
         jLabel2.setText("Email");
         jLabel2.setName("UserLabel"); // NOI18N
 
@@ -93,6 +99,7 @@ public class CadastroUI extends javax.swing.JPanel {
         });
 
         jLabel3.setFont(new java.awt.Font("Liberation Sans", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Senha");
 
         campoSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
@@ -102,6 +109,7 @@ public class CadastroUI extends javax.swing.JPanel {
         campoConfirmarSenha.setToolTipText("Digite a senha novamente para confirmação");
 
         jLabel4.setFont(new java.awt.Font("Liberation Sans", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Confirmar Senha");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -141,24 +149,24 @@ public class CadastroUI extends javax.swing.JPanel {
         campoConfirmarSenha.getAccessibleContext().setAccessibleDescription("Digite a novamente senha para cadastro");
 
         voltarBtn.setActionCommand("voltarBtn");
-        voltarBtn.setBackground(new java.awt.Color(153, 153, 153));
+        voltarBtn.setBackground(new java.awt.Color(242, 242, 242));
         voltarBtn.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         voltarBtn.setLabel("Voltar");
         voltarBtn.setName("VoltarBtn"); // NOI18N
-        voltarBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                voltarBtnActionPerformed(evt);
+        voltarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                voltarBtnMouseClicked(evt);
             }
         });
 
         cadastrarBtn.setActionCommand("cadastrarBtn");
-        cadastrarBtn.setBackground(new java.awt.Color(153, 153, 153));
+        cadastrarBtn.setBackground(new java.awt.Color(242, 242, 242));
         cadastrarBtn.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         cadastrarBtn.setLabel("Cadastrar");
         cadastrarBtn.setName("CadastrarBtn"); // NOI18N
-        cadastrarBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastrarBtnActionPerformed(evt);
+        cadastrarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cadastrarBtnMouseClicked(evt);
             }
         });
 
@@ -193,7 +201,11 @@ public class CadastroUI extends javax.swing.JPanel {
         
     }//GEN-LAST:event_campoEmailActionPerformed
 
-    private void cadastrarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarBtnActionPerformed
+    private void cadastrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cadastrarBtnMouseClicked
+        if (realizandoAcao) {
+            return;
+        }
+                
         campoSenha.setText(campoSenha.getText().trim());
         campoEmail.setText(campoEmail.getText().trim());
         campoConfirmarSenha.setText(campoConfirmarSenha.getText().trim());
@@ -205,7 +217,7 @@ public class CadastroUI extends javax.swing.JPanel {
             return;
         }
         
-        
+        realizandoAcao = true;
         ControlaThreads.executor.submit(() -> {
             try {
                 var dados = new FirebaseCadastroELoginCorpo(
@@ -213,16 +225,20 @@ public class CadastroUI extends javax.swing.JPanel {
                     campoSenha.getText(),
                     null
                 );
-                sessao.registrar(dados);
+                var erro = sessao.registrar(dados);
+                if (!erro.teveErro) {
+                    this.controlaTela.mudarTelaPara(TelasEnum.MENU, "");
+                }
             } catch(IOException exp) {
-                
             }
+            
+            realizandoAcao = false;
         });
-    }//GEN-LAST:event_cadastrarBtnActionPerformed
+    }//GEN-LAST:event_cadastrarBtnMouseClicked
 
-    private void voltarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarBtnActionPerformed
+    private void voltarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_voltarBtnMouseClicked
         controlaTela.mudarTelaPara(TelasEnum.LOGIN, "");
-    }//GEN-LAST:event_voltarBtnActionPerformed
+    }//GEN-LAST:event_voltarBtnMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

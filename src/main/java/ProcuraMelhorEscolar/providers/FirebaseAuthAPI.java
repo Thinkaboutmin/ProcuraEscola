@@ -54,7 +54,7 @@ public interface FirebaseAuthAPI {
      * @param dados Dados para ser enviado a API no corpo da requisição.
      * @return Uma chamada do Firebase com o retorno do FirebaseLoginResposta
      */
-    @POST("./accounts:signIn")
+    @POST("./accounts:signInWithPassword")
     Call<FirebaseLoginResposta> logarUsuario(
             @Query("key") String apiKey,
             @Body() FirebaseCadastroELoginCorpo dados

@@ -6,6 +6,8 @@
 package ProcuraMelhorEscola;
 
 import ProcuraMelhorEscola.ui.TelaPrincipal;
+import ProcuraMelhorEscolar.providers.EducacaoDadosAberto;
+import java.io.IOException;
 
 
 

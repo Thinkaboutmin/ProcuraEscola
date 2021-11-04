@@ -5,8 +5,6 @@
  */
 package ProcuraMelhorEscola.session;
 
-import java.time.LocalDateTime;
-
 /**
  * \brief Dados de uma sessão.
  * 

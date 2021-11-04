@@ -12,5 +12,6 @@ package ProcuraMelhorEscola.ui;
 public enum TelasEnum {
     SPLASH,
     LOGIN,
+    MENU,
     CADASTRO
 }

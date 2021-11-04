@@ -45,6 +45,15 @@ public class Sessao {
         
     
     /**
+     * \brief Retorna os dados da sessão.
+     * 
+     * @return Dados da sessão.
+     */
+    public DataDaSessao pegarDados() {
+        return this.dadosDaSessao;
+    }
+    
+    /**
      * \brief Verificação básica se houve pelo menos alguma tentativa de login
      *        ou se usuário continua logado.
      * 
@@ -72,7 +81,8 @@ public class Sessao {
      * @throws java.io.IOException
      */
     public Erro<String> logar(
-            FirebaseCadastroELoginCorpo dados) throws IOException {
+        FirebaseCadastroELoginCorpo dados
+    ) throws IOException {
         
         
         
@@ -104,7 +114,7 @@ public class Sessao {
         acaoSendoRealizada = false;
         
         this.dadosDaSessao.adaptar(resposta.body());
-        
+        this.definirTempoDeLogin();
         
         return new Erro<>(false, "");
     }
@@ -157,6 +167,9 @@ public class Sessao {
             );
         }              
         
+        this.dadosDaSessao.adaptar(resposta.body());
+        this.definirTempoDeLogin();
+        
         acaoSendoRealizada = false;
         
         return new Erro<>(
@@ -205,7 +218,12 @@ public class Sessao {
             );
         }
         
+        
+        this.dadosDaSessao.adaptar(resposta.body());
+        this.definirTempoDeLogin();
+        
         acaoSendoRealizada = false;
+        
         return new Erro<>(false, "");
     }
     
@@ -230,6 +248,13 @@ public class Sessao {
         }
         
         return new Erro<>(false, "");
+    }
+    
+    private void definirTempoDeLogin() {
+        this.dataEHoraParaExpirar = LocalDateTime.now();
+        this.dataEHoraParaExpirar.plusSeconds(
+                this.dadosDaSessao.pegarTempoDeExpiracao() - 20
+        );
     }
     
     public static Sessao pegarInstancia() {

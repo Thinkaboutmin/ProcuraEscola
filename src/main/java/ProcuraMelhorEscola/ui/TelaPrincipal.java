@@ -8,6 +8,7 @@ package ProcuraMelhorEscola.ui;
 import ProcuraMelhorEscola.session.Sessao;
 import ProcuraMelhorEscola.ui.login.CadastroUI;
 import ProcuraMelhorEscola.ui.login.LoginUI;
+import ProcuraMelhorEscola.ui.procuraEscola.MenuUI;
 import ProcuraMelhorEscola.ui.splash.SplashUI;
 import javax.swing.JFrame;
 
@@ -60,11 +61,19 @@ public class TelaPrincipal extends JFrame implements ControlaTela {
                         Sessao.pegarInstancia()
                 ));
                 break;
+            case MENU:
+                this.getContentPane().add(new MenuUI(
+                        this,
+                        Sessao.pegarInstancia()
+                ));
             default:
                 throw new AssertionError(telaAMudar.name());
             
         }
         
+                
+        this.invalidate();
+        this.repaint();
         this.pack();
     }
 }

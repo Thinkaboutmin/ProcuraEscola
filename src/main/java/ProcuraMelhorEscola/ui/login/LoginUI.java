@@ -5,9 +5,12 @@
  */
 package ProcuraMelhorEscola.ui.login;
 
+import ProcuraMelhorEscola.data.firebase.auth.FirebaseCadastroELoginCorpo;
 import ProcuraMelhorEscola.session.Sessao;
 import ProcuraMelhorEscola.ui.ControlaTela;
 import ProcuraMelhorEscola.ui.TelasEnum;
+import ProcuraMelhorEscola.utils.ControlaThreads;
+import java.io.IOException;
 
 /**
  *
@@ -23,9 +26,10 @@ public class LoginUI extends javax.swing.JPanel {
      * @param sessao
      */
     public LoginUI(ControlaTela controlaTela, Sessao sessao) {
-        this.controlaTela = controlaTela;
-        this.sessao = sessao;
         initComponents();
+        
+        this.controlaTela = controlaTela;
+        this.sessao = sessao;        
     }
 
     /**
@@ -81,11 +85,6 @@ public class LoginUI extends javax.swing.JPanel {
         campoEmail.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
         campoEmail.setToolTipText("Digite o seu usuário para login aqui");
         campoEmail.setName("UserField"); // NOI18N
-        campoEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoEmailActionPerformed(evt);
-            }
-        });
 
         jLabel3.setFont(new java.awt.Font("Liberation Sans", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -95,24 +94,24 @@ public class LoginUI extends javax.swing.JPanel {
         campoSenha.setToolTipText("Digite a senha para login aqui");
 
         cadastrarBtn.setActionCommand("cadastrarBtn");
-        cadastrarBtn.setBackground(new java.awt.Color(153, 153, 153));
+        cadastrarBtn.setBackground(new java.awt.Color(242, 242, 242));
         cadastrarBtn.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         cadastrarBtn.setLabel("Cadastrar");
         cadastrarBtn.setName("LoginBtn"); // NOI18N
-        cadastrarBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastrarBtnActionPerformed(evt);
+        cadastrarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cadastrarBtnMouseClicked(evt);
             }
         });
 
         loginBtn.setActionCommand("loginBtn");
-        loginBtn.setBackground(new java.awt.Color(153, 153, 153));
+        loginBtn.setBackground(new java.awt.Color(242, 242, 242));
         loginBtn.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         loginBtn.setLabel("Login");
         loginBtn.setName("LoginBtn"); // NOI18N
-        loginBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginBtnActionPerformed(evt);
+        loginBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                loginBtnMouseClicked(evt);
             }
         });
 
@@ -170,18 +169,46 @@ public class LoginUI extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void campoEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoEmailActionPerformed
+    private void cadastrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cadastrarBtnMouseClicked
+        this.controlaTela.mudarTelaPara(TelasEnum.CADASTRO, "");
+    }//GEN-LAST:event_cadastrarBtnMouseClicked
 
-    private void cadastrarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarBtnActionPerformed
-        // TODO add your handling code here:
-        controlaTela.mudarTelaPara(TelasEnum.CADASTRO, "");
-    }//GEN-LAST:event_cadastrarBtnActionPerformed
-
-    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_loginBtnActionPerformed
+    private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnMouseClicked
+        this.campoEmail.setText(
+                this.campoEmail.getText().trim()
+        );
+        this.campoSenha.setText(
+                this.campoSenha.getText().trim()
+        );
+        
+        if (this.campoEmail.getText().isEmpty() ||
+            this.campoSenha.getText().isEmpty()) {
+            return;
+        }
+        
+        ControlaThreads.executor.submit(
+            () -> {
+                try {
+                    var dados = new FirebaseCadastroELoginCorpo(
+                            this.campoEmail.getText(),
+                            this.campoSenha.getText(),
+                            true
+                    );
+                    
+                    var erro = this.sessao.logar(dados);
+                    if (!erro.teveErro) {
+                        this.controlaTela.mudarTelaPara(
+                                TelasEnum.MENU, ""
+                        );
+                    }
+                } catch (IOException err) {
+                    
+                }
+            }
+        );
+                
+        
+    }//GEN-LAST:event_loginBtnMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

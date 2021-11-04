@@ -30,7 +30,7 @@ public class SplashUI extends javax.swing.JPanel {
         initComponents();
         
         ControlaThreads.executor.submit(() -> {
-            controlaTela.mudarTelaPara(TelasEnum.LOGIN, "");
+            this.controlaTela.mudarTelaPara(TelasEnum.LOGIN, "");
         });
     }
 
