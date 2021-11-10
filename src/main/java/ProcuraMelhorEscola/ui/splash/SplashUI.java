@@ -24,7 +24,8 @@ public class SplashUI extends javax.swing.JPanel {
      * @param controlaTela
      * @param sessao
      */
-    public SplashUI(ControlaTela controlaTela, Sessao sessao) {
+    public SplashUI(ControlaTela controlaTela, Sessao sessao, 
+                    String extraData) {
         this.controlaTela = controlaTela;
         this.sessao = sessao;
         initComponents();

@@ -10,6 +10,7 @@ import ProcuraMelhorEscola.data.firebase.auth.FirebaseCadastroResposta;
 import ProcuraMelhorEscola.data.firebase.auth.FirebaseLoginResposta;
 import ProcuraMelhorEscola.data.firebase.token.FirebaseTokenEnvio;
 import ProcuraMelhorEscola.data.firebase.token.FirebaseTokenResposta;
+import com.google.gson.JsonElement;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -36,6 +37,11 @@ public abstract class Firebase {
             baseUrl("https://securetoken.googleapis.com/v1/").
             build();
                 
+    static final private Retrofit retrofitRealtimeDatabase = new Retrofit
+            .Builder().addConverterFactory(GsonConverterFactory.create()).
+            baseUrl("https://procuraescola-4b9c4-default-rtdb.firebaseio.com").
+            build();
+    
     static final private FirebaseAuthAPI firebaseAuthAPI = retrofitAuth.create(
             FirebaseAuthAPI.class
     );
@@ -43,7 +49,10 @@ public abstract class Firebase {
     
     static final private FirebaseTokenAPI firebaseTokenAPI 
             = retrofitToken.create(FirebaseTokenAPI.class);
-          
+    
+    static final private FirebaseRealtimeDatabaseAPI firebaseRealtimeDatabaseAPI 
+            = retrofitRealtimeDatabase.create(FirebaseRealtimeDatabaseAPI.class);
+            
     
     static public Call<FirebaseCadastroResposta> cadastrarUsuario(
             String apiKey,
@@ -62,5 +71,25 @@ public abstract class Firebase {
             String apiKey,
             FirebaseTokenEnvio dados) {
         return firebaseTokenAPI.sessaoValida(apiKey, dados);
+    }
+    
+    static public Call<JsonElement> pegarDados(
+            String caminho,
+            String tokenAutenticacao) {
+        return firebaseRealtimeDatabaseAPI.pegarDados(
+                caminho, 
+                tokenAutenticacao
+        );
+    }
+    
+    static public Call<JsonElement> gravadorDados(
+            String caminho,
+            String tokenAutenticacao,
+            String dados) {
+        return firebaseRealtimeDatabaseAPI.gravarDados(
+                caminho, 
+                tokenAutenticacao, 
+                dados
+        );
     }
 }

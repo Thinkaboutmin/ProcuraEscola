@@ -27,10 +27,29 @@ public interface EducacaoDadosAbertoAPI {
      * 
      * 
      * @param nomeDasEscolas Filtro pelo nomes das escola
-     * @return Objeto JSON com a lista de objetos.
+     * @return Chamada com retorno de objeto JSON contendo lista de objetos.
      */
     @GET("escolas")
     Call<JsonArray> listarEscolas(@Query("nome") String nomeDasEscolas);
+    
+    /**
+     * \brief Busca várias escolas porém mais opções de filtragem.
+     * 
+     * A busca pode ser feita passando o nome da escola ou o estado ou a
+     * cidade. Porém, algum dos três tem que ser passado para ser aceito pela
+     * API.
+     * 
+     * @param nomeDasEscolas Filtro pelo nomes das escolas.
+     * @param estado Filtro pelo estado das escolas
+     * @param cidade Filtro pela cidade das escolas.
+     * @return Chamada com retorno de objeto JSON contendo lista de objetos.
+     */
+    @GET("escolas/buscaavancada")
+    Call<JsonArray> listarEscolasBuscaAvancada(            
+        @Query("nome") String nomeDasEscolas,
+        @Query("estado") String estado,
+        @Query("cidade") Long cidade
+    );
     
     
     /**
@@ -41,4 +60,16 @@ public interface EducacaoDadosAbertoAPI {
      */
     @GET("escola/{codEscola}")
     Call<DetalheEscola> detalhesEscola(@Path("codEscola") String codigoEscola);
+    
+    
+    /**
+     * \brief Busca as cidades de um estado
+     * 
+     * 
+     * @param estado Sigla do estado a pegar as cidades.
+     * @return Uma chamada da API que retorna a lista de cidades. 
+     */
+    @GET("cidades/{estado}")
+    Call<JsonArray> pegarCidadesDeUmEstado(@Path("estado") String estado);
+    
 }

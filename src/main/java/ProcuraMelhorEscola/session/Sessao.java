@@ -227,6 +227,12 @@ public class Sessao {
         return new Erro<>(false, "");
     }
     
+    public Erro<String> deslogar() {
+        this.dadosDaSessao.limparDados();
+                
+        return new Erro<>(false, "");
+    }
+    
     /**
      * \brief Realiza uma simples verificação se o dados do login e senha estão
      *        preenchidos.

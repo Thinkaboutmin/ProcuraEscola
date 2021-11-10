@@ -13,5 +13,6 @@ public enum TelasEnum {
     SPLASH,
     LOGIN,
     MENU,
-    CADASTRO
+    CADASTRO,
+    LISTA_DE_ESCOLAS
 }

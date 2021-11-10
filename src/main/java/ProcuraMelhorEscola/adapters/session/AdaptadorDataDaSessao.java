@@ -4,7 +4,6 @@ package ProcuraMelhorEscola.adapters.session;
 import ProcuraMelhorEscola.data.firebase.auth.FirebaseCadastroResposta;
 import ProcuraMelhorEscola.data.firebase.token.FirebaseTokenResposta;
 import ProcuraMelhorEscola.session.DataDaSessao;
-import java.time.LocalDateTime;
 
 /**
  * \brief Adapta os dados recebidos de outros POJOs.
@@ -14,6 +13,7 @@ import java.time.LocalDateTime;
 public class AdaptadorDataDaSessao implements DataDaSessao {
     private String email;
     private String localId;
+    private String idToken;
     private String tokenDeAtualizacao;
     private long tempoDeExpiracao;  
 
@@ -23,13 +23,18 @@ public class AdaptadorDataDaSessao implements DataDaSessao {
     }
 
     @Override
-    public String pegarTokenId() {
+    public String pegarLocalId() {
         return localId;
     }
 
     @Override
     public String pegarTokenDeAtualizacao() {
         return tokenDeAtualizacao;
+    }
+    
+    @Override
+    public String pegarTokenId() {
+        return this.idToken;
     }
 
     @Override
@@ -47,6 +52,7 @@ public class AdaptadorDataDaSessao implements DataDaSessao {
         this.tempoDeExpiracao = resposta.expiraEm;
         this.localId = resposta.idLocal;
         this.tokenDeAtualizacao = resposta.tokenDeRefresh;
+        this.idToken = resposta.idToken;
     }
     
     /**
@@ -58,7 +64,15 @@ public class AdaptadorDataDaSessao implements DataDaSessao {
         this.tokenDeAtualizacao = resposta.tokenDeAtualizacao;
         this.localId = resposta.usuarioId;
         this.tempoDeExpiracao = resposta.expiraEm;
+        this.idToken = resposta.tokenId;
     }
     
+    
+    public void limparDados() {
+        this.email = "";
+        this.tempoDeExpiracao = 0;
+        this.localId = "";
+        this.tokenDeAtualizacao = "";
+    }
     
 }

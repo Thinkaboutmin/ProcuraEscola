@@ -22,7 +22,7 @@ public interface DataDaSessao {
      * \brief Pega a identificação interna do usuário no Firebase.
      * @return o token
      */
-    public String pegarTokenId();
+    public String pegarLocalId();
     
     /**
      * \brief Pega o token de atualização. Necessário para controlar a sessão.
@@ -38,4 +38,11 @@ public interface DataDaSessao {
      * @return o tempo para expirar a sessão em segundos.
      */
     public long pegarTempoDeExpiracao();
+    
+    /**
+     * \brief Pega o token de acesso para outras apis.
+     * 
+     * @return 
+     */
+    public String pegarTokenId();
 }

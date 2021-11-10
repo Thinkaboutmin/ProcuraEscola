@@ -10,7 +10,11 @@ import ProcuraMelhorEscola.session.Sessao;
 import ProcuraMelhorEscola.ui.ControlaTela;
 import ProcuraMelhorEscola.ui.TelasEnum;
 import ProcuraMelhorEscola.utils.ControlaThreads;
+import ProcuraMelhorEscola.utils.SnippetsSwing;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -20,12 +24,14 @@ public class LoginUI extends javax.swing.JPanel {
     private final ControlaTela controlaTela;
     private final Sessao sessao;
     
+    private volatile boolean realizandoAcao = false;
+    
     /**
      * Creates new form LoginUI
      * @param controlaTela
      * @param sessao
      */
-    public LoginUI(ControlaTela controlaTela, Sessao sessao) {
+    public LoginUI(ControlaTela controlaTela, Sessao sessao, String extraData) {
         initComponents();
         
         this.controlaTela = controlaTela;
@@ -47,9 +53,9 @@ public class LoginUI extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         campoEmail = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        campoSenha = new javax.swing.JTextField();
         cadastrarBtn = new java.awt.Button();
         loginBtn = new java.awt.Button();
+        campoSenha = new javax.swing.JPasswordField();
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
         jPanel1.setName("Header"); // NOI18N
@@ -90,9 +96,6 @@ public class LoginUI extends javax.swing.JPanel {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Senha");
 
-        campoSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
-        campoSenha.setToolTipText("Digite a senha para login aqui");
-
         cadastrarBtn.setActionCommand("cadastrarBtn");
         cadastrarBtn.setBackground(new java.awt.Color(242, 242, 242));
         cadastrarBtn.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
@@ -115,6 +118,9 @@ public class LoginUI extends javax.swing.JPanel {
             }
         });
 
+        campoSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
+        campoSenha.setToolTipText("Digite a senha para login aqui");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -122,18 +128,23 @@ public class LoginUI extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(62, 62, 62)
-                        .addComponent(cadastrarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(62, 62, 62)
+                                .addComponent(cadastrarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(campoEmail)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(campoSenha)
-                            .addComponent(campoEmail)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(campoSenha)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,7 +157,7 @@ public class LoginUI extends javax.swing.JPanel {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cadastrarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -164,7 +175,7 @@ public class LoginUI extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -174,6 +185,10 @@ public class LoginUI extends javax.swing.JPanel {
     }//GEN-LAST:event_cadastrarBtnMouseClicked
 
     private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnMouseClicked
+        if (this.realizandoAcao) {
+            return;
+        }
+        
         this.campoEmail.setText(
                 this.campoEmail.getText().trim()
         );
@@ -181,13 +196,20 @@ public class LoginUI extends javax.swing.JPanel {
                 this.campoSenha.getText().trim()
         );
         
-        if (this.campoEmail.getText().isEmpty() ||
-            this.campoSenha.getText().isEmpty()) {
+        if (
+            this.campoEmail.getText().isEmpty() ||
+            this.campoSenha.getText().isEmpty()
+           ) {
             return;
         }
-        
+
         ControlaThreads.executor.submit(
             () -> {
+                this.realizandoAcao = true;
+                SnippetsSwing.alterarEstadoComponente(
+                    this.loginBtn, false
+                );
+                                
                 try {
                     var dados = new FirebaseCadastroELoginCorpo(
                             this.campoEmail.getText(),
@@ -197,24 +219,32 @@ public class LoginUI extends javax.swing.JPanel {
                     
                     var erro = this.sessao.logar(dados);
                     if (!erro.teveErro) {
-                        this.controlaTela.mudarTelaPara(
+                        // Contexto desta execução está fora do contexto do EDT.
+                        SwingUtilities.invokeLater(() -> {
+                            this.controlaTela.mudarTelaPara(
                                 TelasEnum.MENU, ""
-                        );
+                            );
+                        });                        
                     }
-                } catch (IOException err) {
-                    
+                } catch (IOException ex) {
+                    Logger.getLogger(LoginUI.class.getName()).log(
+                        Level.WARNING, null, ex
+                    );                    
                 }
-            }
-        );
                 
-        
+                SnippetsSwing.alterarEstadoComponente(
+                    this.loginBtn, true
+                );
+                this.realizandoAcao = false;
+            }
+        );                        
     }//GEN-LAST:event_loginBtnMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button cadastrarBtn;
     private javax.swing.JTextField campoEmail;
-    private javax.swing.JTextField campoSenha;
+    private javax.swing.JPasswordField campoSenha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

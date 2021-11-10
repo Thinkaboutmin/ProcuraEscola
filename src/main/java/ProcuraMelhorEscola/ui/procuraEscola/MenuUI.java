@@ -23,7 +23,7 @@ public class MenuUI extends javax.swing.JPanel {
      * @param controlaTela
      * @param sessao
      */
-    public MenuUI(ControlaTela controlaTela, Sessao sessao) {
+    public MenuUI(ControlaTela controlaTela, Sessao sessao, String extraData) {
         initComponents();
         
         this.controlaTela = controlaTela;
@@ -34,14 +34,16 @@ public class MenuUI extends javax.swing.JPanel {
                 TelasEnum.LOGIN, 
                 "Usuário não está logado ou sessão já expirou"
             );
+        } else {
+            this.emailLabel.setText(
+            this.emailLabel.getText().replace(
+                    "$EMAIL",
+                    sessao.pegarDados().pegarEmail()
+                )
+            );
         }
         
-        this.emailLabel.setText(
-            this.emailLabel.getText().replace(
-                "$EMAIL",
-                sessao.pegarDados().pegarEmail()
-            )
-        );
+        
     }
 
     /**
@@ -53,127 +55,170 @@ public class MenuUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        headerPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        menuPanel = new javax.swing.JPanel();
         procMelhorEscola = new java.awt.Button();
-        estatisticaBtn = new java.awt.Button();
         favoritosBtn = new java.awt.Button();
-        label1 = new java.awt.Label();
-        emailLabel = new javax.swing.JLabel();
+        estatisticaBtn = new java.awt.Button();
+        footerPanel = new javax.swing.JPanel();
+        deslogarPanel = new javax.swing.JPanel();
         deslogarBtn = new javax.swing.JButton();
+        emailPanel = new javax.swing.JPanel();
+        emailLabel = new javax.swing.JLabel();
 
-        jPanel1.setBackground(new java.awt.Color(102, 102, 102));
-        jPanel1.setToolTipText("");
+        setBackground(new java.awt.Color(51, 51, 51));
+        setForeground(new java.awt.Color(0, 0, 0));
+        setMaximumSize(null);
+        setPreferredSize(new java.awt.Dimension(753, 338));
+
+        headerPanel.setBackground(new java.awt.Color(102, 102, 102));
+        headerPanel.setToolTipText("");
+        headerPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(222, 222, 221));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Menu");
+        jLabel1.setAlignmentY(0.0F);
+        headerPanel.add(jLabel1);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(264, 264, 264))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(37, 37, 37))
-        );
+        menuPanel.setBackground(getBackground());
+        menuPanel.setLayout(new java.awt.GridLayout(1, 0, 60, 0));
 
         procMelhorEscola.setBackground(new java.awt.Color(242, 242, 242));
         procMelhorEscola.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
         procMelhorEscola.setLabel("Procura melhor escola");
-
-        estatisticaBtn.setBackground(new java.awt.Color(242, 242, 242));
-        estatisticaBtn.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
-        estatisticaBtn.setLabel("Estatística");
-        estatisticaBtn.setMinimumSize(new java.awt.Dimension(142, 25));
-        estatisticaBtn.setPreferredSize(new java.awt.Dimension(142, 25));
+        procMelhorEscola.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                procMelhorEscolaMouseClicked(evt);
+            }
+        });
+        menuPanel.add(procMelhorEscola);
 
         favoritosBtn.setActionCommand("Favoritos");
         favoritosBtn.setBackground(new java.awt.Color(242, 242, 242));
         favoritosBtn.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
         favoritosBtn.setLabel("Favoritos");
+        favoritosBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                favoritosBtnActionPerformed(evt);
+            }
+        });
+        menuPanel.add(favoritosBtn);
 
-        label1.setForeground(new java.awt.Color(255, 255, 255));
-        label1.setText("Logado em ");
-        label1.setVisible(false);
+        estatisticaBtn.setBackground(new java.awt.Color(242, 242, 242));
+        estatisticaBtn.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
+        estatisticaBtn.setLabel("Estatística");
+        estatisticaBtn.setMinimumSize(new java.awt.Dimension(142, 25));
+        menuPanel.add(estatisticaBtn);
 
-        emailLabel.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
-        emailLabel.setText("Logado como $EMAIL");
+        footerPanel.setBackground(getBackground());
+        footerPanel.setLayout(new java.awt.BorderLayout());
+
+        deslogarPanel.setBackground(footerPanel.getBackground());
+        deslogarPanel.setPreferredSize(new java.awt.Dimension(376, 100));
+        deslogarPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 0));
 
         deslogarBtn.setBackground(new java.awt.Color(242, 242, 242));
         deslogarBtn.setFont(new java.awt.Font("Liberation Sans", 1, 11)); // NOI18N
         deslogarBtn.setForeground(new java.awt.Color(0, 0, 0));
         deslogarBtn.setText("Deslogar");
+        deslogarBtn.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        deslogarBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         deslogarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 deslogarBtnMouseClicked(evt);
             }
         });
+        deslogarPanel.add(deslogarBtn);
+
+        footerPanel.add(deslogarPanel, java.awt.BorderLayout.EAST);
+
+        emailPanel.setBackground(footerPanel.getBackground());
+        emailPanel.setPreferredSize(new java.awt.Dimension(376, 100));
+
+        emailLabel.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        emailLabel.setForeground(new java.awt.Color(222, 222, 221));
+        emailLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        emailLabel.setText("Logado como $EMAIL");
+
+        javax.swing.GroupLayout emailPanelLayout = new javax.swing.GroupLayout(emailPanel);
+        emailPanel.setLayout(emailPanelLayout);
+        emailPanelLayout.setHorizontalGroup(
+            emailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, emailPanelLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(emailLabel)
+                .addGap(0, 0, 0))
+        );
+        emailPanelLayout.setVerticalGroup(
+            emailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(emailPanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(emailLabel)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        footerPanel.add(emailPanel, java.awt.BorderLayout.WEST);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(procMelhorEscola, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(estatisticaBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(favoritosBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(emailLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(deslogarBtn)))
-                .addGap(23, 23, 23))
+            .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(footerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(85, Short.MAX_VALUE)
+                    .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(85, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(procMelhorEscola, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(estatisticaBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(favoritosBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deslogarBtn))
-                .addGap(26, 26, 26))
+                .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                .addGap(202, 202, 202)
+                .addComponent(footerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(157, Short.MAX_VALUE)
+                    .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(131, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void deslogarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deslogarBtnMouseClicked
         // TODO add your handling code here:
+        this.sessao.deslogar();
+        
+        this.controlaTela.mudarTelaPara(
+                TelasEnum.LOGIN,
+                ""
+        );
     }//GEN-LAST:event_deslogarBtnMouseClicked
+
+    private void favoritosBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_favoritosBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_favoritosBtnActionPerformed
+
+    private void procMelhorEscolaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_procMelhorEscolaMouseClicked
+        // TODO add your handling code here:
+        this.controlaTela.mudarTelaPara(TelasEnum.LISTA_DE_ESCOLAS, "");
+    }//GEN-LAST:event_procMelhorEscolaMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deslogarBtn;
+    private javax.swing.JPanel deslogarPanel;
     private javax.swing.JLabel emailLabel;
+    private javax.swing.JPanel emailPanel;
     private java.awt.Button estatisticaBtn;
     private java.awt.Button favoritosBtn;
+    private javax.swing.JPanel footerPanel;
+    private javax.swing.JPanel headerPanel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private java.awt.Label label1;
+    private javax.swing.JPanel menuPanel;
     private java.awt.Button procMelhorEscola;
     // End of variables declaration//GEN-END:variables
 }

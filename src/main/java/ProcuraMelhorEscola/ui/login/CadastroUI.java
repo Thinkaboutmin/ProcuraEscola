@@ -10,7 +10,12 @@ import ProcuraMelhorEscola.session.Sessao;
 import ProcuraMelhorEscola.ui.ControlaTela;
 import ProcuraMelhorEscola.ui.TelasEnum;
 import ProcuraMelhorEscola.utils.ControlaThreads;
+import ProcuraMelhorEscola.utils.SnippetsSwing;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -28,7 +33,8 @@ public class CadastroUI extends javax.swing.JPanel {
      * @param controlaTela
      * @param sessao
      */
-    public CadastroUI(ControlaTela controlaTela, Sessao sessao) {
+    public CadastroUI(ControlaTela controlaTela, Sessao sessao, 
+                      String extraData) {
         this.controlaTela = controlaTela;
         this.sessao = sessao;
         initComponents();
@@ -49,9 +55,9 @@ public class CadastroUI extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         campoEmail = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        campoSenha = new javax.swing.JTextField();
-        campoConfirmarSenha = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        campoSenha = new javax.swing.JPasswordField();
+        campoConfirmarSenha = new javax.swing.JPasswordField();
         voltarBtn = new java.awt.Button();
         cadastrarBtn = new java.awt.Button();
 
@@ -102,15 +108,13 @@ public class CadastroUI extends javax.swing.JPanel {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Senha");
 
-        campoSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
-        campoSenha.setToolTipText("Digite a senha para cadastro aqui");
-
-        campoConfirmarSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
-        campoConfirmarSenha.setToolTipText("Digite a senha novamente para confirmação");
-
         jLabel4.setFont(new java.awt.Font("Liberation Sans", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Confirmar Senha");
+
+        campoSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
+
+        campoConfirmarSenha.setFont(new java.awt.Font("Liberation Sans", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -118,13 +122,14 @@ public class CadastroUI extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(campoSenha)
-                    .addComponent(campoEmail)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(campoConfirmarSenha)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(campoConfirmarSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(campoSenha)
+                        .addComponent(campoEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -146,7 +151,6 @@ public class CadastroUI extends javax.swing.JPanel {
         );
 
         campoEmail.getAccessibleContext().setAccessibleName("");
-        campoConfirmarSenha.getAccessibleContext().setAccessibleDescription("Digite a novamente senha para cadastro");
 
         voltarBtn.setActionCommand("voltarBtn");
         voltarBtn.setBackground(new java.awt.Color(242, 242, 242));
@@ -204,11 +208,14 @@ public class CadastroUI extends javax.swing.JPanel {
     private void cadastrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cadastrarBtnMouseClicked
         if (realizandoAcao) {
             return;
-        }
-                
-        campoSenha.setText(campoSenha.getText().trim());
-        campoEmail.setText(campoEmail.getText().trim());
-        campoConfirmarSenha.setText(campoConfirmarSenha.getText().trim());
+        }                                 
+        
+        // Remove espaços em branco dos campos.
+        this.campoSenha.setText(this.campoSenha.getText().trim());
+        this.campoEmail.setText(this.campoEmail.getText().trim());
+        this.campoConfirmarSenha.setText(
+                this.campoConfirmarSenha.getText().trim()
+        );
         
         if (campoEmail.getText().isEmpty() ||
             campoSenha.getText().isEmpty() ||
@@ -216,22 +223,32 @@ public class CadastroUI extends javax.swing.JPanel {
             !campoSenha.getText().equals(campoConfirmarSenha.getText())) {
             return;
         }
-        
-        realizandoAcao = true;
+                
         ControlaThreads.executor.submit(() -> {
+            realizandoAcao = true;
+            SnippetsSwing.alterarEstadoComponente(this.cadastrarBtn, false);
+            
             try {
+                // Dados a serem cadastrados no Firebase
                 var dados = new FirebaseCadastroELoginCorpo(
                     campoEmail.getText(),
                     campoSenha.getText(),
                     null
                 );
+                
                 var erro = sessao.registrar(dados);
                 if (!erro.teveErro) {
-                    this.controlaTela.mudarTelaPara(TelasEnum.MENU, "");
-                }
-            } catch(IOException exp) {
+                    SwingUtilities.invokeLater(() -> {
+                        this.controlaTela.mudarTelaPara(TelasEnum.MENU, "");
+                    });                    
+                }                
+            } catch(IOException ex) {
+                Logger.getLogger(CadastroUI.class.getName()).log(
+                        Level.SEVERE, null, ex
+                );
             }
             
+            SnippetsSwing.alterarEstadoComponente(this.cadastrarBtn, true);
             realizandoAcao = false;
         });
     }//GEN-LAST:event_cadastrarBtnMouseClicked
@@ -240,12 +257,11 @@ public class CadastroUI extends javax.swing.JPanel {
         controlaTela.mudarTelaPara(TelasEnum.LOGIN, "");
     }//GEN-LAST:event_voltarBtnMouseClicked
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button cadastrarBtn;
-    private javax.swing.JTextField campoConfirmarSenha;
+    private javax.swing.JPasswordField campoConfirmarSenha;
     private javax.swing.JTextField campoEmail;
-    private javax.swing.JTextField campoSenha;
+    private javax.swing.JPasswordField campoSenha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

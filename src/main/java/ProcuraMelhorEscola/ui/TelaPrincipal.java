@@ -9,6 +9,7 @@ import ProcuraMelhorEscola.session.Sessao;
 import ProcuraMelhorEscola.ui.login.CadastroUI;
 import ProcuraMelhorEscola.ui.login.LoginUI;
 import ProcuraMelhorEscola.ui.procuraEscola.MenuUI;
+import ProcuraMelhorEscola.ui.procuraEscola.ListaDeEscolasUI;
 import ProcuraMelhorEscola.ui.splash.SplashUI;
 import javax.swing.JFrame;
 
@@ -26,8 +27,9 @@ public class TelaPrincipal extends JFrame implements ControlaTela {
         this.telaAtual = TelasEnum.SPLASH;
         this.getContentPane().add(new SplashUI(
                 this,
-                Sessao.pegarInstancia()
-        ));
+                Sessao.pegarInstancia(),
+                ""
+        ));       
         
         this.pack();
     }
@@ -38,41 +40,58 @@ public class TelaPrincipal extends JFrame implements ControlaTela {
 
     @Override
     public void mudarTelaPara(TelasEnum telaAMudar, String dados) {
-        this.getContentPane().removeAll();
+        if (telaAMudar == this.telaAtual) {
+            return;
+        }
         
+        this.getContentPane().removeAll();        
         
         this.telaAtual = telaAMudar;
         switch(telaAMudar) {
             case SPLASH:
                 this.getContentPane().add(new SplashUI(
                         this,
-                        Sessao.pegarInstancia()
+                        Sessao.pegarInstancia(),
+                        dados
                 ));
                 break;
             case LOGIN:
                 this.getContentPane().add(new LoginUI(
                         this,
-                        Sessao.pegarInstancia()
+                        Sessao.pegarInstancia(),
+                        dados
                 ));
                 break;
             case CADASTRO:
                 this.getContentPane().add(new CadastroUI(
                         this,
-                        Sessao.pegarInstancia()
+                        Sessao.pegarInstancia(),
+                        dados
                 ));
                 break;
             case MENU:
                 this.getContentPane().add(new MenuUI(
                         this,
-                        Sessao.pegarInstancia()
+                        Sessao.pegarInstancia(),
+                        dados
                 ));
+                break;
+            case LISTA_DE_ESCOLAS:
+                this.getContentPane().add(new ListaDeEscolasUI(
+                        this,
+                        Sessao.pegarInstancia(),
+                        dados
+                    )
+                );
+                break;
+              
             default:
                 throw new AssertionError(telaAMudar.name());
             
         }
-        
-                
+                     
         this.invalidate();
+        this.validate();
         this.repaint();
         this.pack();
     }
